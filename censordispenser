@@ -1,0 +1,71 @@
+# These are the emails you will be censoring. The open() function is opening the text file that the emails are contained in and the .read() method is allowing us to save their contexts to the following variables:
+email_one = open("email_one.txt", "r").read()
+email_two = open("email_two.txt", "r").read()
+email_three = open("email_three.txt", "r").read()
+email_four = open("email_four.txt", "r").read()
+
+proprietary_terms = ["she", "personality matrix", "sense of self", "self-preservation", "learning algorithm", "her", "herself"]
+
+negative_words = ["concerned", "behind", "danger", "dangerous", "alarming", "alarmed", "out of control", "help", "unhappy", "bad", "upset", "awful", "broken", "damage", "damaging", "dismal", "distressed", "distressed", "concerning", "horrible", "horribly", "questionable"]
+
+#NUMBER TWO
+def censor_word(email, word):
+  if word in email:
+    return email.replace(word, "**")
+  else:
+    return email
+
+#print(censor_word(email_one, "learning algorithms"))
+
+
+#NUMBER THREE
+def censor_lst(email, lst):
+  for word in lst:
+    if word in email:
+      email = email.replace(word, "**")
+    else:
+      continue
+  return email
+
+#print(censor_lst(email_two, proprietary_terms))
+
+
+#NUMBER FOUR
+def censor_neg_words(email, lst, neg_words):
+  email = censor_lst(email, lst)
+  count = 0
+  for word in neg_words:
+    count += email.count(word)
+  if count >=2:
+    for word in neg_words:
+      email = email.replace(word, "**")
+  else:
+    email = email
+  return email
+
+#print(censor_neg_words(email_three, proprietary_terms, negative_words))
+
+
+#NUMBER FIVE
+def censor_all(email, lst, neg_words):
+  email = censor_neg_words(email, lst, neg_words)
+  email = email.split()
+  for x in range(1, len(email)-1):
+    if email[x] == "**":
+      email[x+1] = "REPLACE"
+      email[x-1] = "REPLACE"
+    else:
+      continue
+  email = " ".join(email)
+  for word in email:
+    if "REPLACE" in email:
+      email = email.replace("REPLACE", "**")
+    else:
+      continue
+  return email
+
+
+
+print(censor_all(email_four, proprietary_terms, negative_words))
+
+
